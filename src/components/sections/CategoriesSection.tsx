@@ -1,55 +1,61 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { easeOut, motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
 const categories = [
   {
     id: 1,
     name: "Electronics",
-    description: "Latest tech & gadgets",
+    description: "Latest tech & gadgets for your everyday needs and entertainment",
     image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=500&h=600&fit=crop",
     productCount: 145,
-    color: "from-blue-500/20 to-purple-500/20"
+    color: "from-blue-500/20 to-purple-500/20",
+    height: "h-64" // Added height property for masonry variation
   },
   {
     id: 2,
     name: "Fashion",
-    description: "Trendy clothing & accessories",
+    description: "Trendy clothing & accessories to express your unique style",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=400&fit=crop",
     productCount: 289,
-    color: "from-pink-500/20 to-rose-500/20"
+    color: "from-pink-500/20 to-rose-500/20",
+    height: "h-80"
   },
   {
     id: 3,
     name: "Home & Living",
-    description: "Modern furniture & decor",
+    description: "Modern furniture & decor to transform your living spaces",
     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop",
     productCount: 167,
-    color: "from-green-500/20 to-emerald-500/20"
+    color: "from-green-500/20 to-emerald-500/20",
+    height: "h-72"
   },
   {
     id: 4,
     name: "Beauty",
-    description: "Skincare & cosmetics",
+    description: "Skincare & cosmetics to enhance your natural beauty and confidence",
     image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&h=400&fit=crop",
     productCount: 98,
-    color: "from-amber-500/20 to-orange-500/20"
+    color: "from-amber-500/20 to-orange-500/20",
+    height: "h-60"
   },
   {
     id: 5,
     name: "Sports & Fitness",
-    description: "Active lifestyle essentials",
+    description: "Active lifestyle essentials to keep you moving and healthy",
     image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=600&fit=crop",
     productCount: 134,
-    color: "from-cyan-500/20 to-blue-500/20"
+    color: "from-cyan-500/20 to-blue-500/20",
+    height: "h-96"
   },
   {
     id: 6,
     name: "Books & Media",
-    description: "Knowledge & entertainment",
+    description: "Knowledge & entertainment for your mind and soul",
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=500&h=400&fit=crop",
     productCount: 76,
-    color: "from-violet-500/20 to-purple-500/20"
+    color: "from-violet-500/20 to-purple-500/20",
+    height: "h-68"
   }
 ];
 
@@ -77,7 +83,7 @@ const CategoriesSection: React.FC = () => {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut" as const
+        ease: easeOut
       }
     }
   };
@@ -101,13 +107,13 @@ const CategoriesSection: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* Categories Grid */}
+        {/* Pinterest-style Masonry Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6"
         >
           {categories.map((category) => (
             <motion.div
@@ -117,11 +123,11 @@ const CategoriesSection: React.FC = () => {
                 y: -8,
                 transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
               }}
-              className="group cursor-pointer"
+              className="group cursor-pointer break-inside-avoid"
             >
               <div className="relative overflow-hidden rounded-2xl bg-card shadow-soft hover:shadow-large transition-all duration-500">
                 {/* Background Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className={`relative ${category.height} overflow-hidden`}>
                   <img
                     src={category.image}
                     alt={category.name}
@@ -132,7 +138,7 @@ const CategoriesSection: React.FC = () => {
                   <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-70 group-hover:opacity-50 transition-opacity duration-300`} />
                   
                   {/* Content Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   
                   {/* Product Count Badge */}
                   <div className="absolute top-4 right-4">
@@ -148,7 +154,7 @@ const CategoriesSection: React.FC = () => {
                     <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
                       {category.name}
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground line-clamp-2">
                       {category.description}
                     </p>
                   </div>

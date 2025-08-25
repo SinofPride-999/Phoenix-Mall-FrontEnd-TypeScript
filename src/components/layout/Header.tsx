@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ShoppingBag, User, Menu, X } from 'lucide-react';
+import { Search, ShoppingBag, User, Menu, X, LogIn, UserPlus } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +31,14 @@ const Header: React.FC = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  const handleSignup = () => {
+    navigate('/signup');
+  };
+
   return (
     <>
       <motion.header
@@ -43,7 +51,7 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between lg:justify-start lg:gap-16">
             {/* Logo */}
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -51,9 +59,9 @@ const Header: React.FC = () => {
               onClick={() => navigate('/')}
             >
               <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">L</span>
+                <span className="text-white font-bold text-sm">P</span>
               </div>
-              <span className="text-xl font-bold font-heading">LumiStore</span>
+              <span className="text-xl font-bold font-heading">Phoenix</span>
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -76,21 +84,52 @@ const Header: React.FC = () => {
             </nav>
 
             {/* Search Bar - Desktop */}
-            <div className="hidden md:flex items-center space-x-4 flex-1 max-w-md mx-8">
-              <div className="relative flex-1">
+            <div className="hidden md:flex items-center flex-1 mx-8">
+              <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   type="text"
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 rounded-full border-border bg-background/80 backdrop-blur-sm"
+                  className="pl-10 pr-4 py-2 rounded-full border-border bg-background/80 backdrop-blur-sm w-full"
                 />
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-4">
+              {/* Auth Buttons - Desktop */}
+              <div className="hidden md:flex items-center space-x-2">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLogin}
+                    className="flex items-center space-x-1"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    <span>Login</span>
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    size="sm"
+                    onClick={handleSignup}
+                    className="flex items-center space-x-1"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>Sign Up</span>
+                  </Button>
+                </motion.div>
+              </div>
+
               {/* Cart */}
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -199,6 +238,41 @@ const Header: React.FC = () => {
                     {item.name}
                   </motion.a>
                 ))}
+                
+                {/* Mobile Auth Buttons */}
+                <div className="pt-4 border-t border-border">
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ 
+                      opacity: 1, 
+                      x: 0,
+                      transition: { delay: navigationItems.length * 0.1 }
+                    }}
+                    className="flex flex-col space-y-4"
+                  >
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        handleLogin();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full justify-center"
+                    >
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Login
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleSignup();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full justify-center"
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Sign Up
+                    </Button>
+                  </motion.div>
+                </div>
               </div>
             </motion.nav>
           </motion.div>

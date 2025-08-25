@@ -6,13 +6,13 @@ import { Input } from '@/components/ui/input';
 
 const Footer: React.FC = () => {
   const footerLinks = {
-    'Shop': [
-      'New Arrivals',
-      'Best Sellers',
-      'Sale Items',
-      'Categories',
-      'Gift Cards'
-    ],
+    // 'Shop': [
+    //   'New Arrivals',
+    //   'Best Sellers',
+    //   'Sale Items',
+    //   'Categories',
+    //   'Gift Cards'
+    // ],
     'Customer Care': [
       'Contact Us',
       'Shipping Info',
@@ -81,9 +81,9 @@ const Footer: React.FC = () => {
               {/* Logo */}
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">L</span>
+                  <span className="text-white font-bold text-sm">P</span>
                 </div>
-                <span className="text-xl font-bold font-heading">LumiStore</span>
+                <span className="text-xl font-bold font-heading">Phoenix</span>
               </div>
 
               {/* Description */}
@@ -147,37 +147,6 @@ const Footer: React.FC = () => {
                 </ul>
               </motion.div>
             ))}
-          </div>
-        </motion.div>
-
-        {/* Newsletter Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="py-8 border-t border-border"
-        >
-          <div className="flex flex-col lg:flex-row items-center justify-between space-y-6 lg:space-y-0">
-            <div className="text-center lg:text-left">
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                Stay in the Loop
-              </h3>
-              <p className="text-muted-foreground">
-                Get exclusive offers, new arrivals, and style inspiration delivered to your inbox.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 w-full lg:w-auto">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="min-w-[300px] rounded-full"
-              />
-              <Button className="hero-button whitespace-nowrap px-8">
-                Subscribe
-              </Button>
-            </div>
           </div>
         </motion.div>
 

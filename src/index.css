@@ -270,3 +270,50 @@
     @apply bg-muted-foreground/50;
   }
 }
+
+/* Enhanced masonry grid styles */
+.masonry-grid {
+  column-count: 1;
+  column-gap: 1.5rem;
+  @apply w-full;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry-grid {
+    column-count: 4;
+  }
+}
+
+.masonry-item {
+  @apply inline-block w-full mb-6;
+  break-inside: avoid;
+}
+
+/* Product card height variations */
+.product-card-short {
+  height: 18rem;
+}
+
+.product-card-medium {
+  height: 22rem;
+}
+
+.product-card-tall {
+  height: 28rem;
+}
+
+.product-card-xtall {
+  height: 34rem;
+}
