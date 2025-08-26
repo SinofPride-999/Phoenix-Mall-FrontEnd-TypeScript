@@ -19,9 +19,9 @@
     --popover-foreground: 0 0% 0%;
     
     /* Electric Blue Accent System */
-    --primary: 215 91% 55%;
+    --primary: 0 84% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 215 91% 65%;
+    --primary-glow: 0 84% 65%; 
     
     /* Neutral Gray System */
     --secondary: 0 0% 96%;
@@ -30,7 +30,7 @@
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
     
-    --accent: 215 91% 55%;
+    --accent: 0 84% 55%;
     --accent-foreground: 0 0% 100%;
     
     /* Status Colors */
@@ -95,9 +95,9 @@
     --popover: 0 0% 8%;
     --popover-foreground: 0 0% 95%;
     
-    --primary: 215 91% 55%;
+    --primary: 0 84% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 215 91% 65%;
+    --primary-glow: 0 84% 65%;
     
     --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 80%;
@@ -105,7 +105,7 @@
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 60%;
     
-    --accent: 215 91% 55%;
+    --accent: 0 84% 55%;
     --accent-foreground: 0 0% 100%;
     
     --destructive: 0 84% 60%;

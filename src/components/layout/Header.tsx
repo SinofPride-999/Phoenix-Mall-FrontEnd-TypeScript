@@ -58,9 +58,9 @@ const Header: React.FC = () => {
               className="flex items-center space-x-2 cursor-pointer"
               onClick={() => navigate('/')}
             >
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">P</span>
-              </div>
+              {/* <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">.</span>
+              </div> */}
               <span className="text-xl font-bold font-heading">Phoenix</span>
             </motion.div>
 

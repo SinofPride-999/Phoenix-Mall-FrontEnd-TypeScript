@@ -91,7 +91,7 @@ const Index = () => {
         {/* Quick Categories Navigation */}
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -104,9 +104,9 @@ const Index = () => {
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Explore our diverse range of categories to find exactly what you're looking for
               </p>
-            </motion.div>
+            </motion.div> */}
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {featuredCategories.map((category, index) => {
                 const Icon = category.icon;
                 return (
@@ -133,7 +133,7 @@ const Index = () => {
                   </motion.button>
                 );
               })}
-            </div>
+            </div> */}
           </div>
         </section>
 
