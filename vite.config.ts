@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   preview: {
-    allowedHosts: ["phoenic-ecommerce-1.onrender.com"], // <-- Add this
+    allowedHosts: ["phoenix-ecommerce.onrender.com"],
   },
   plugins: [
     react(),
