@@ -21,8 +21,158 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+// Mock product data to pass to ProductGrid
+const mockProducts = [
+  
+  {
+    id: 1,
+    name: "Stylish Backpack",
+    price: 130,
+    originalPrice: 160,
+    rating: 4.7,
+    reviews: 119,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxMR2gUh2fadsgCT2gYnGWben1nBiS-H832w&s",
+    category: "Fashion",
+    badge: "Trending",
+    description: "Durable backpack with multiple compartments for everyday use.",
+    location: "Accra, Ghana",
+    condition: "Brand New",
+    isLiked: true,
+    discount: 18,
+    seller: "Urban Gear",
+    inStock: true,
+  },
+  {
+    id: 2,
+    name: "4K Drone Camera",
+    price: 590,
+    originalPrice: 720,
+    rating: 4.8,
+    reviews: 84,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb35QtsAaL3k3nfVNk2tolZk7QifvoRBgd_w&s",
+    category: "Electronics",
+    badge: "Hot",
+    description: "Professional drone with 4K camera and GPS stabilization.",
+    location: "Cape Coast, Ghana",
+    condition: "Brand New",
+    isLiked: false,
+    discount: 18,
+    seller: "DroneZone",
+    inStock: true,
+  },
+  {
+    id: 3,
+    name: "Deluxe Yoga Mat",
+    price: 70,
+    originalPrice: 95,
+    rating: 4.7,
+    reviews: 132,
+    image: "https://megango.com/media/catalog/product/cache/e328e8185e7eb650e829953bde1cea67/t/p/tpe-deluxe-yoga-mat-125cm-x-61cm-x-14mm.jpg",
+    category: "Sports",
+    badge: "Bestseller",
+    description: "Thick non-slip yoga mat with carrying strap.",
+    location: "Accra, Ghana",
+    condition: "Brand New",
+    isLiked: false,
+    discount: 26,
+    seller: "FitLife GH",
+    inStock: true,
+  },
+  {
+    id: 4,
+    name: "Modern Floor Lamp",
+    price: 190,
+    originalPrice: 240,
+    rating: 4.6,
+    reviews: 92,
+    image: "https://media.istockphoto.com/id/1474563913/photo/modern-floor-lamp.jpg?s=612x612&w=0&k=20&c=IjRRD-yyIxfXLhy5TDg9MIDPi9y5yHvSGSRyFxL8P58=",
+    category: "Home Decor",
+    badge: "New",
+    description: "Elegant floor lamp with adjustable lighting settings.",
+    location: "Kumasi, Ghana",
+    condition: "Brand New",
+    isLiked: false,
+    discount: 21,
+    seller: "BrightLiving",
+    inStock: true,
+  },
+  {
+    id: 5,
+    name: "Portable Bluetooth Speaker",
+    price: 125,
+    originalPrice: 160,
+    rating: 4.8,
+    reviews: 176,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeubwweyazZoF76slKEzChR939yaW3s9U3nw&s",
+    category: "Electronics",
+    badge: "Hot Deal",
+    description: "Waterproof speaker with powerful bass and 12-hour playtime.",
+    location: "Takoradi, Ghana",
+    condition: "Brand New",
+    isLiked: true,
+    discount: 22,
+    seller: "AudioMax",
+    inStock: true,
+  },
+  {
+    id: 6,
+    name: "Electric Kettle",
+    price: 65,
+    originalPrice: 90,
+    rating: 4.5,
+    reviews: 150,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOZZ4gwPF5guSTtREVDP5xTmvvBJAVCOS3mg&s",
+    category: "Appliances",
+    badge: "Hot",
+    description: "1.5L stainless steel electric kettle with auto shut-off.",
+    location: "Kumasi, Ghana",
+    condition: "Brand New",
+    isLiked: true,
+    discount: 28,
+    seller: "KitchenPro",
+    inStock: true,
+  },
+  {
+    id: 7,
+    name: "Artisan Ceramic Vase",
+    price: 95,
+    originalPrice: 130,
+    rating: 4.8,
+    reviews: 54,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVXafS_T7SGppIipGr3M9GYtBgJ3THvUm8rg&s",
+    category: "Home Decor",
+    badge: "New Arrival",
+    description: "Handcrafted ceramic vase with unique glaze finish.",
+    location: "Tamale, Ghana",
+    condition: "Brand New",
+    isLiked: false,
+    discount: 27,
+    seller: "Artisan Hub",
+    inStock: true,
+  },
+  {
+    id: 8,
+    name: "Adjustable Standing Desk",
+    price: 450,
+    originalPrice: 520,
+    rating: 4.9,
+    reviews: 82,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZjw2rIS5FgZgu_BgtoNxKBRKU6GQs8h3BEw&s",
+    category: "Furniture",
+    badge: "Premium",
+    description: "Height-adjustable desk with sturdy frame and modern design.",
+    location: "Accra, Ghana",
+    condition: "Brand New",
+    isLiked: true,
+    discount: 13,
+    seller: "FurniWorld",
+    inStock: true,
+  }
+];
+
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<string>('3'); // Default to 3-column view
 
   // Featured categories for quick navigation
   const featuredCategories = [
@@ -88,55 +238,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Quick Categories Navigation */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto px-4">
-            {/* <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-                Shop by <span className="text-gradient">Category</span>
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Explore our diverse range of categories to find exactly what you're looking for
-              </p>
-            </motion.div> */}
-
-            {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {featuredCategories.map((category, index) => {
-                const Icon = category.icon;
-                return (
-                  <motion.button
-                    key={category.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{ y: -5, scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`p-6 rounded-2xl text-center transition-all duration-300 ${
-                      selectedCategory === category.id
-                        ? 'bg-primary text-primary-foreground shadow-glow'
-                        : 'bg-card text-foreground shadow-soft hover:shadow-large'
-                    }`}
-                  >
-                    <div className="flex justify-center mb-3">
-                      <Icon className="w-8 h-8" />
-                    </div>
-                    <h3 className="font-semibold text-sm mb-1">{category.name}</h3>
-                    <p className="text-xs opacity-70">{category.count} products</p>
-                  </motion.button>
-                );
-              })}
-            </div> */}
-          </div>
-        </section>
-
         {/* Categories Section */}
         <CategoriesSection />
 
@@ -162,7 +263,12 @@ const Index = () => {
               </p>
             </motion.div>
 
-            <ProductGrid />
+            {/* Updated ProductGrid with required props */}
+            <ProductGrid 
+              products={mockProducts} 
+              viewMode={viewMode} 
+              onViewModeChange={setViewMode} 
+            />
           </div>
         </section>
 
