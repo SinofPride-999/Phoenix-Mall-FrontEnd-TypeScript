@@ -235,7 +235,7 @@ const ShopPage = () => {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [sortBy, setSortBy] = useState('default');
-  const [viewMode, setViewMode] = useState('2');
+  const [viewMode, setViewMode] = useState('4');
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
   const [showSort, setShowSort] = useState(false);
@@ -339,7 +339,7 @@ const ShopPage = () => {
       case '2': return 'grid-cols-2 lg:grid-cols-3';
       case '3': return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4';
       case '4': return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5';
-      default: return 'grid-cols-2 lg:grid-cols-3';
+      default: return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5';
     }
   };
 
@@ -507,7 +507,12 @@ const ShopPage = () => {
             </div>
 
             {/* Products Grid */}
-            <div className={`grid gap-3 sm:gap-4 ${getGridCols()}`}>
+            <div className={`grid gap-3 sm:gap-4 ${
+              viewMode === '1' ? 'grid-cols-1' :
+              viewMode === '2' ? 'grid-cols-2 lg:grid-cols-3' :
+              viewMode === '3' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4' :
+              'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'
+            }`}>
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} viewMode={viewMode} />
               ))}

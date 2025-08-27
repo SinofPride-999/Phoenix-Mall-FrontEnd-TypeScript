@@ -317,3 +317,13 @@
 .product-card-xtall {
   height: 34rem;
 }
+
+body {
+  padding-bottom: 80px; /* Add padding to prevent content from being hidden behind the nav */
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 0; /* Remove padding on desktop */
+  }
+}

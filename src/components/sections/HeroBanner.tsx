@@ -5,19 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 const HeroBanner: React.FC = () => {
   const banners = [
     {
-      url: 'https://hayden-hill.com/cdn/shop/articles/AdobeStock',
+      url: 'https://thumbsup.com/cdn/shop/collections/Gadgets_Banner_3000_x_600px_1350x270.png?v=1746077326',
       title: "Summer Collection",
       subtitle: "Discover our new arrivals",
       cta: "Shop Now"
     },
     {
-      url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9',
+      url: 'https://www.fashiontrendsetter.com/v2/wp-content/uploads/2019/09/Bibhu-Mohapatra-Spring-Summer-2020-Feat.jpg',
       title: "Elegant Accessories", 
       subtitle: "Elevate your style",
       cta: "Explore"
     },
     {
-      url: 'https://images.unsplash.com/photo-1600180758895-6e1f4f28b7f5',
+      url: 'https://www.shutterstock.com/image-vector/set-mockup-realistic-devices-smartphone-260nw-1229073931.jpg',
       title: "Exclusive Offers",
       subtitle: "Limited time only", 
       cta: "See More"

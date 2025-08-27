@@ -23,7 +23,7 @@ const MobileBottomNav: React.FC = () => {
     { 
       name: 'Cart', 
       icon: ShoppingBag, 
-      path: '/cart',
+      path: '/shopping-bag',
       badge: 3
     },
     { 
@@ -40,9 +40,24 @@ const MobileBottomNav: React.FC = () => {
     <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+      className="fixed bottom-4 left-4 right-4 z-50 md:hidden"
+      style={{
+        // This ensures it stays above the footer
+        position: 'fixed',
+        bottom: '1rem',
+      }}
     >
-      <div className="glass border-t border-border/50 px-4 py-2">
+      {/* Glass effect container with rounded corners */}
+      <div 
+        className="glass rounded-2xl border border-white/20 backdrop-blur-xl p-3 shadow-2xl"
+        style={{
+          background: 'rgba(255, 255, 255, 0.25)',
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+        }}
+      >
         <div className="flex items-center justify-around">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -52,7 +67,11 @@ const MobileBottomNav: React.FC = () => {
               <motion.button
                 key={tab.name}
                 onClick={() => navigate(tab.path)}
-                className={`bottom-tab ${active ? 'active' : ''}`}
+                className={`relative flex flex-col items-center p-2 rounded-xl transition-all duration-300 ${
+                  active 
+                    ? 'bg-white/20 text-red-600' 
+                    : 'text-black/70 hover:text-green hover:bg-white/10'
+                }`}
                 whileTap={{ scale: 0.95 }}
                 animate={{ 
                   scale: active ? 1.05 : 1,
@@ -60,24 +79,24 @@ const MobileBottomNav: React.FC = () => {
                 }}
               >
                 <div className="relative">
-                  <Icon className="bottom-tab-icon" />
+                  <Icon className="w-5 h-5" />
                   {tab.badge && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium text-[10px]"
+                      className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium text-[10px]"
                     >
                       {tab.badge}
                     </motion.span>
                   )}
                 </div>
-                <span className="mt-1">{tab.name}</span>
+                <span className="text-xs mt-1 font-medium">{tab.name}</span>
                 
                 {/* Active indicator */}
                 {active && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                    className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-red-600 rounded-full"
                     transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                   />
                 )}

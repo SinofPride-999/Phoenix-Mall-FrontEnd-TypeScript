@@ -1,4 +1,3 @@
-// pages/Index.tsx
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from '@/components/layout/Header';
@@ -172,7 +171,7 @@ const mockProducts = [
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [viewMode, setViewMode] = useState<string>('3'); // Default to 3-column view
+  const [viewMode, setViewMode] = useState<string>('4'); // Default to 3-column view
 
   // Featured categories for quick navigation
   const featuredCategories = [

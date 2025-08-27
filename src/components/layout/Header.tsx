@@ -183,7 +183,7 @@ const Header: React.FC = () => {
                       variants={iconVariants}
                       whileHover="hover"
                       whileTap="tap"
-                      className="relative p-2 rounded-full transition-all duration-200 cursor-pointer group hover:bg-gradient-to-r hover:from-primary hover:to-purple-600"
+                      className="relative p-2 rounded-full transition-all duration-200 cursor-pointer group hover:bg-gradient-to-r hover:from-primary hover:to-purple-600 hidden md:block"
                       onClick={() => navigate('/messages')}
                     >
                       <MessageSquare className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
@@ -201,7 +201,7 @@ const Header: React.FC = () => {
                       variants={iconVariants}
                       whileHover="hover"
                       whileTap="tap"
-                      className="relative p-2 rounded-full hover:bg-accent cursor-pointer group"
+                      className="relative p-2 rounded-full hover:bg-accent cursor-pointer group hidden md:block"
                       onClick={() => navigate('/notifications')}
                     >
                       <Bell className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
@@ -219,7 +219,7 @@ const Header: React.FC = () => {
                       variants={iconVariants}
                       whileHover="hover"
                       whileTap="tap"
-                      className="p-2 rounded-full hover:bg-accent cursor-pointer group"
+                      className="p-2 rounded-full hover:bg-accent cursor-pointer group hidden md:block"
                       onClick={() => navigate('/saved')}
                     >
                       <Heart className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
@@ -229,13 +229,13 @@ const Header: React.FC = () => {
                       variants={iconVariants}
                       whileHover="hover"
                       whileTap="tap"
-                      className="p-2 rounded-full hover:bg-accent cursor-pointer group"
+                      className="p-2 rounded-full hover:bg-accent cursor-pointer group hidden md:block"
                       onClick={() => navigate('/ads')}
                     >
                       <Megaphone className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
                     </motion.div>
                     
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
                       <Button 
                         size="sm" 
                         onClick={() => navigate('/sell')} 
@@ -420,37 +420,91 @@ const Header: React.FC = () => {
                       </motion.button>
                     </div>
 
-                    {/* Navigation Items */}
-                    <div className="flex flex-col space-y-4">
-                      {navigationItems.map((item, index) => (
-                        <motion.a
-                          key={item.name}
-                          href={item.path}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                            isActive(item.path) 
-                              ? 'bg-primary/10 text-primary font-medium' 
-                              : 'text-foreground/80 hover:text-foreground hover:bg-accent'
-                          }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            navigate(item.path);
-                            setIsMobileMenuOpen(false);
-                          }}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ 
-                            opacity: 1, 
-                            x: 0, 
-                            transition: { delay: 0.1 + index * 0.05 } 
-                          }}
-                          whileHover={{ x: 4 }}
-                        >
-                          <div className={`p-2 rounded-lg ${isActive(item.path) ? 'bg-primary/20' : 'bg-accent'}`}>
-                            {item.icon}
-                          </div>
-                          <span>{item.name}</span>
-                        </motion.a>
-                      ))}
+                    {/* Action Icons for Mobile */}
+                    
+                    <div className="grid grid-cols-4 gap-2 py-4 border-t border-border/50">
+                      <motion.div 
+                        className="flex flex-col items-center p-3 rounded-lg hover:bg-accent cursor-pointer"
+                        onClick={() => {
+                          navigate('/messages');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="relative">
+                          <MessageSquare className="w-5 h-5 mx-auto" />
+                          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium">
+                            2
+                          </span>
+                        </div>
+                        <span className="text-xs mt-1">Messages</span>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="flex flex-col items-center p-3 rounded-lg hover:bg-accent cursor-pointer"
+                        onClick={() => {
+                          navigate('/notifications');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="relative">
+                          <Bell className="w-5 h-5 mx-auto" />
+                          <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium">
+                            5
+                          </span>
+                        </div>
+                        <span className="text-xs mt-1">Notifications</span>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="flex flex-col items-center p-3 rounded-lg hover:bg-accent cursor-pointer"
+                        onClick={() => {
+                          navigate('/saved');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Heart className="w-5 h-5 mx-auto" />
+                        <span className="text-xs mt-1">Saved</span>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="flex flex-col items-center p-3 rounded-lg hover:bg-accent cursor-pointer"
+                        onClick={() => {
+                          navigate('/ads');
+                          setIsMobileMenuOpen(false);
+                        }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Megaphone className="w-5 h-5 mx-auto" />
+                        <span className="text-xs mt-1">Ads</span>
+                      </motion.div>
                     </div>
+
+                    {/* Sell Button for Mobile */}
+                    <motion.div 
+                      className="pt-2 border-t border-border/50"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <Button
+                        size="lg"
+                        className="w-full rounded-xl bg-gradient-to-r from-primary to-purple-600"
+                        onClick={() => {
+                          navigate('/sell');
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        <PlusCircle className="w-5 h-5 mr-2" />
+                        Sell Item
+                      </Button>
+                    </motion.div>
 
                     {/* Auth Buttons (only on Home) */}
                     {isHome && (

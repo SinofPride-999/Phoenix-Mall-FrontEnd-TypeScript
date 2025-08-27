@@ -89,7 +89,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
       case '2': return 'grid-cols-2 lg:grid-cols-3';
       case '3': return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4';
       case '4': return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5';
-      default: return 'grid-cols-2 lg:grid-cols-3';
+      default: return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5';
     }
   };
 
@@ -240,7 +240,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
 
       {/* Load More Button - Mobile */}
       <div className="lg:hidden mt-6 text-center">
-        <button className="w-full py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors">
+        <button className="w-full py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-800 transition-colors">
           Load More Products
         </button>
       </div>

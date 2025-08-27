@@ -65,9 +65,9 @@ const Footer: React.FC = () => {
             {/* Brand Section */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                {/* <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-red-600 font-bold text-lg">P</span>
-                </div>
+                </div> */}
                 <span className="text-2xl font-bold text-white">Phoenix</span>
               </div>
 
@@ -146,15 +146,15 @@ const Footer: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-start space-x-3 text-red-100">
                   <Mail className="w-5 h-5 mt-0.5 text-white" />
-                  <span>hello@phoenix.com</span>
+                  <span>dev.team@phoenix.com</span>
                 </div>
                 <div className="flex items-start space-x-3 text-red-100">
                   <Phone className="w-5 h-5 mt-0.5 text-white" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+233 54 023 7212</span>
                 </div>
                 <div className="flex items-start space-x-3 text-red-100">
                   <MapPin className="w-5 h-5 mt-0.5 text-white" />
-                  <span>123 Design Street, Creative City, NY 10001</span>
+                  <span>Accra, Ghana</span>
                 </div>
               </div>
             </div>
@@ -165,9 +165,8 @@ const Footer: React.FC = () => {
         <div className="py-8 border-t border-red-500/30">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="flex items-center space-x-2 text-red-100">
-              <span>© 2024 Phoenix. Crafted with</span>
-              <Heart className="w-4 h-4 fill-white text-white" />
-              <span>for modern commerce</span>
+              <span>© 2024 Phoenix. Built by </span>
+              <span>AlgoriX</span>
             </div>
             
             <div className="flex items-center space-x-6 text-sm text-red-100">
