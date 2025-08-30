@@ -328,7 +328,7 @@ const Messaging = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Header />
+      {/* <Header /> */}
 
       {/* Chat List Sidebar */}
       <motion.div
@@ -681,7 +681,7 @@ const Messaging = () => {
         )}
       </AnimatePresence>
 
-      <MobileBottomNav />
+      {/* <MobileBottomNav /> */}
     </div>
   );
 };
