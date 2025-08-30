@@ -8,27 +8,27 @@ const MobileBottomNav: React.FC = () => {
   const location = useLocation();
 
   const tabs = [
-    { 
-      name: 'Home', 
-      icon: Home, 
+    {
+      name: 'Home',
+      icon: Home,
       path: '/',
       badge: null
     },
-    { 
-      name: 'Shop', 
-      icon: Search, 
+    {
+      name: 'Shop',
+      icon: Search,
       path: '/shop',
       badge: null
     },
-    { 
-      name: 'Cart', 
-      icon: ShoppingBag, 
+    {
+      name: 'Cart',
+      icon: ShoppingBag,
       path: '/shopping-bag',
       badge: 3
     },
-    { 
-      name: 'Profile', 
-      icon: User, 
+    {
+      name: 'Profile',
+      icon: User,
       path: '/profile',
       badge: null
     }
@@ -40,43 +40,39 @@ const MobileBottomNav: React.FC = () => {
     <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
+      transition={{ type: 'spring', damping: 20, stiffness: 100 }}
       className="fixed bottom-4 left-4 right-4 z-50 md:hidden"
-      style={{
-        // This ensures it stays above the footer
-        position: 'fixed',
-        bottom: '1rem',
-      }}
     >
-      {/* Glass effect container with rounded corners */}
-      <div 
-        className="glass rounded-2xl border border-white/20 backdrop-blur-xl p-3 shadow-2xl"
+      {/* iOS-style glass dock with liquid effect */}
+      <div
+        className="rounded-3xl p-2.5 overflow-hidden"
         style={{
-          background: 'rgba(255, 255, 255, 0.25)',
-          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
+          background: 'rgba(255, 255, 255, 0.55)',
+          boxShadow: `
+            0 0 0 1px rgba(255, 255, 255, 0.2),
+            0 20px 30px rgba(0, 0, 0, 0.15),
+            inset 0 -5px 10px rgba(255, 255, 255, 0.5),
+            inset 0 5px 10px rgba(255, 255, 255, 0.2)
+          `,
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
         }}
       >
         <div className="flex items-center justify-around">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = isActive(tab.path);
-            
+
             return (
               <motion.button
                 key={tab.name}
                 onClick={() => navigate(tab.path)}
                 className={`relative flex flex-col items-center p-2 rounded-xl transition-all duration-300 ${
-                  active 
-                    ? 'bg-white/20 text-red-600' 
-                    : 'text-black/70 hover:text-green hover:bg-white/10'
+                  active
+                    ? 'bg-white/40 text-red-600'
+                    : 'text-gray-600 hover:text-red-500'
                 }`}
-                whileTap={{ scale: 0.95 }}
-                animate={{ 
-                  scale: active ? 1.05 : 1,
-                  transition: { duration: 0.2 }
-                }}
+                whileTap={{ scale: 0.92 }}
               >
                 <div className="relative">
                   <Icon className="w-5 h-5" />
@@ -84,20 +80,19 @@ const MobileBottomNav: React.FC = () => {
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium text-[10px]"
+                      className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium text-[10px] shadow-sm"
                     >
                       {tab.badge}
                     </motion.span>
                   )}
                 </div>
-                <span className="text-xs mt-1 font-medium">{tab.name}</span>
-                
-                {/* Active indicator */}
+
+                {/* Active indicator with liquid effect */}
                 {active && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-red-600 rounded-full"
-                    transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                    className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-red-600 rounded-full shadow-sm"
+                    transition={{ type: 'spring', damping: 15, stiffness: 300 }}
                   />
                 )}
               </motion.button>

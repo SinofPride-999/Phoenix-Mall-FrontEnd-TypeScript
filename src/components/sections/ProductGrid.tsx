@@ -65,8 +65,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
   };
 
   const getConditionColor = (condition: string) => {
-    return condition === "Brand New" 
-      ? "bg-green-100 text-green-800" 
+    return condition === "Brand New"
+      ? "bg-green-100 text-green-800"
       : "bg-blue-100 text-blue-800";
   };
 
@@ -75,8 +75,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
       <Star
         key={i}
         className={`w-3 h-3 ${
-          i < Math.floor(rating) 
-            ? "text-yellow-400 fill-yellow-400" 
+          i < Math.floor(rating)
+            ? "text-yellow-400 fill-yellow-400"
             : "text-gray-300"
         }`}
       />
@@ -89,7 +89,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
       case '2': return 'grid-cols-2 lg:grid-cols-3';
       case '3': return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4';
       case '4': return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5';
-      default: return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5';
+      default: return 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4';
     }
   };
 
@@ -100,7 +100,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
         <p className="text-sm text-gray-500">
           Showing {products.length} products
         </p>
-        
+
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">View:</span>
@@ -140,7 +140,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
                 alt={product.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              
+
               {/* Wishlist Button */}
               <button
                 onClick={() => toggleLike(product.id)}
@@ -152,7 +152,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
               </button>
 
               {/* Quick Add Button - Desktop */}
-              <button 
+              <button
                 onClick={() => addToCart(product.id)}
                 className={`absolute bottom-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-gray-900 text-white text-xs rounded-full opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0 hidden sm:block ${
                   viewMode === '1' ? 'hidden' : ''
@@ -160,7 +160,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
               >
                 Quick Add
               </button>
-              
+
               {product.badge && (
                 <span className={`absolute top-2 left-2 px-2 py-1 ${getBadgeColor(product.badge)} text-xs font-medium rounded ${
                   viewMode === '1' ? 'text-xs px-1.5 py-0.5' : ''
@@ -187,7 +187,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
                   {product.name}
                 </h3>
               </div>
-              
+
               <p className={`text-gray-500 mb-2 ${
                 viewMode === '1' ? 'text-xs' : 'text-xs sm:text-sm'
               }`}>
@@ -221,9 +221,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, viewMode, onViewMod
                     </span>
                   )}
                 </div>
-                
+
                 {/* Mobile Add Button */}
-                <button 
+                <button
                   onClick={() => addToCart(product.id)}
                   disabled={!product.inStock}
                   className={`sm:hidden p-1.5 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed ${
