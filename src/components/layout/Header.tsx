@@ -179,6 +179,7 @@ const Header: React.FC = () => {
               <div className="flex items-center space-x-3">
                 {!isHome && (
                   <>
+                    {/* Messaging */}
                     <motion.div
                       variants={iconVariants}
                       whileHover="hover"
@@ -197,6 +198,7 @@ const Header: React.FC = () => {
                       </motion.span>
                     </motion.div>
 
+                    {/* Notifications */}
                     <motion.div
                       variants={iconVariants}
                       whileHover="hover"
@@ -215,16 +217,18 @@ const Header: React.FC = () => {
                       </motion.span>
                     </motion.div>
 
+                    {/* Wish List */}
                     <motion.div
                       variants={iconVariants}
                       whileHover="hover"
                       whileTap="tap"
                       className="p-2 rounded-full hover:bg-accent cursor-pointer group hidden md:block"
-                      onClick={() => navigate('/saved')}
+                      onClick={() => navigate('/wish-list')}
                     >
                       <Heart className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
                     </motion.div>
 
+                    {/* Ads */}
                     <motion.div
                       variants={iconVariants}
                       whileHover="hover"
@@ -235,6 +239,7 @@ const Header: React.FC = () => {
                       <Megaphone className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
                     </motion.div>
 
+                    {/* Sell */}
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
                       <Button
                         size="sm"

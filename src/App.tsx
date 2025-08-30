@@ -13,6 +13,8 @@ import ShopPage from "./pages/ShopPage";
 import DetailPage from "./pages/DetailPage";
 import ShoppingPage from "./pages/ShoppingBag";
 import Messaging from "./pages/Messaging";
+import Notifications from "./pages/Notifications";
+import WishList from "./pages/WishList";
 
 // Admin
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/detail" element={<DetailPage />} />
           <Route path="/shopping-bag" element={<ShoppingPage />} />
           <Route path="/messaging" element={<Messaging />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/wish-list" element={<WishList />} />
 
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
