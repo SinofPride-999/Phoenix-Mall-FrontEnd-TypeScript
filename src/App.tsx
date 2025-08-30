@@ -12,6 +12,9 @@ import NotFound from "./pages/NotFound";
 import ShopPage from "./pages/ShopPage";
 import DetailPage from "./pages/DetailPage";
 import ShoppingPage from "./pages/ShoppingBag";
+import Messaging from "./pages/Messaging";
+
+// Admin
 import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
@@ -29,6 +32,8 @@ const App = () => (
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/detail" element={<DetailPage />} />
           <Route path="/shopping-bag" element={<ShoppingPage />} />
+          <Route path="/messaging" element={<Messaging />} />
+
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
