@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Home, Search, ShoppingBag, User } from 'lucide-react';
+import { Home, Search, ShoppingBag, User, ShoppingCart } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const MobileBottomNav: React.FC = () => {
@@ -16,7 +16,7 @@ const MobileBottomNav: React.FC = () => {
     },
     {
       name: 'Shop',
-      icon: Search,
+      icon: ShoppingCart,
       path: '/shop',
       badge: null
     },
@@ -24,7 +24,7 @@ const MobileBottomNav: React.FC = () => {
       name: 'Cart',
       icon: ShoppingBag,
       path: '/shopping-bag',
-      badge: 3
+      badge: '0'
     },
     {
       name: 'Profile',

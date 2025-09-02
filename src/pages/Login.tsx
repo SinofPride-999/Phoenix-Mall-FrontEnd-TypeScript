@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,8 +15,9 @@ const Login: React.FC = () => {
     rememberMe: false
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,18 +30,11 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to Phoenix!",
-      });
-      
-      navigate('/');
+      await login(formData.email, formData.password);
+      navigate('/shop');
     } catch (error) {
       toast({
         title: "Login Failed",
@@ -47,7 +42,7 @@ const Login: React.FC = () => {
         variant: "destructive"
       });
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -164,7 +159,7 @@ const Login: React.FC = () => {
                 id="rememberMe"
                 name="rememberMe"
                 checked={formData.rememberMe}
-                onCheckedChange={(checked) => 
+                onCheckedChange={(checked) =>
                   setFormData(prev => ({ ...prev, rememberMe: checked as boolean }))
                 }
               />

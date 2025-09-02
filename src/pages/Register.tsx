@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -20,8 +21,9 @@ const Register: React.FC = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { register, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,30 +36,15 @@ const Register: React.FC = () => {
 
   const validateForm = () => {
     if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match.",
-        variant: "destructive"
-      });
-      return false;
+      throw new Error("Passwords don't match");
     }
 
-    if (formData.password.length < 8) {
-      toast({
-        title: "Password too short",
-        description: "Password must be at least 8 characters long.",
-        variant: "destructive"
-      });
-      return false;
+    if (formData.password.length < 6) {
+      throw new Error("Password must be at least 6 characters long");
     }
 
     if (!formData.agreeToTerms) {
-      toast({
-        title: "Terms not accepted",
-        description: "Please agree to the terms and conditions.",
-        variant: "destructive"
-      });
-      return false;
+      throw new Error("Please agree to the terms and conditions");
     }
 
     return true;
@@ -65,20 +52,22 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm()) return;
 
-    setIsLoading(true);
+    // if (!validateForm()) return;
+
+    // setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Account Created",
-        description: "Welcome to Phoenix! Your account has been created successfully.",
+      validateForm();
+
+      await register({
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        role: 'buyer' // Default role, you can make this dynamic
       });
-      
+
       navigate('/');
     } catch (error) {
       toast({
@@ -87,7 +76,7 @@ const Register: React.FC = () => {
         variant: "destructive"
       });
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -141,7 +130,6 @@ const Register: React.FC = () => {
                     className="pl-10 pr-4 py-3"
                   />
                 </div>
-              </div>
 
               {/* Last Name */}
               <div className="space-y-2">
@@ -212,11 +200,16 @@ const Register: React.FC = () => {
 
               {/* Password Requirements */}
               <div className="grid grid-cols-2 gap-2 mt-2">
-                {passwordRequirements.map((req) => (
+                {[
+                  { id: 1, text: 'At least 6 characters', met: formData.password.length >= 6 },
+                  { id: 2, text: 'Contains uppercase letter', met: /[A-Z]/.test(formData.password) },
+                  { id: 3, text: 'Contains lowercase letter', met: /[a-z]/.test(formData.password) },
+                  { id: 4, text: 'Contains number', met: /[0-9]/.test(formData.password) },
+                ].map((req) => (
                   <div key={req.id} className="flex items-center space-x-2">
                     <div className={`w-4 h-4 rounded-full flex items-center justify-center text-xs ${
-                      req.met 
-                        ? 'bg-green-500 text-white' 
+                      req.met
+                        ? 'bg-green-500 text-white'
                         : 'bg-muted text-transparent'
                     }`}>
                       <Check className="w-3 h-3" />
@@ -263,7 +256,7 @@ const Register: React.FC = () => {
                   id="agreeToTerms"
                   name="agreeToTerms"
                   checked={formData.agreeToTerms}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={(checked) =>
                     setFormData(prev => ({ ...prev, agreeToTerms: checked as boolean }))
                   }
                 />
@@ -281,13 +274,14 @@ const Register: React.FC = () => {
                   </Link>
                 </label>
               </div>
+            </div>
 
               <div className="flex items-start space-x-2">
                 <Checkbox
                   id="subscribeNewsletter"
                   name="subscribeNewsletter"
                   checked={formData.subscribeNewsletter}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={(checked) =>
                     setFormData(prev => ({ ...prev, subscribeNewsletter: checked as boolean }))
                   }
                 />

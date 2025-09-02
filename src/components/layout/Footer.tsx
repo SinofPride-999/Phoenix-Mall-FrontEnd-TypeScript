@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, 
+import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube,
          Heart, ArrowUp, Shield, Truck, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -68,11 +68,11 @@ const Footer: React.FC = () => {
                 {/* <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-red-600 font-bold text-lg">P</span>
                 </div> */}
-                <span className="text-2xl font-bold text-white">Phoenix</span>
+                <span className="text-2xl font-bold text-white">PhoeniX Mall</span>
               </div>
 
               <p className="text-red-100 leading-relaxed max-w-md">
-                Discover premium products that define modern elegance and exceptional quality. 
+                Discover premium products that define modern elegance and exceptional quality.
                 Your destination for curated collections and innovative designs.
               </p>
 
@@ -88,8 +88,8 @@ const Footer: React.FC = () => {
                     className="bg-white/10 border-red-400/30 text-white placeholder:text-red-200"
                     required
                   />
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="bg-white text-red-600 hover:bg-red-50"
                   >
                     Subscribe
@@ -165,10 +165,10 @@ const Footer: React.FC = () => {
         <div className="py-8 border-t border-red-500/30">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="flex items-center space-x-2 text-red-100">
-              <span>© 2024 Phoenix. Built by </span>
+              <span>© 2025 PhoeniX Mall. Built by </span>
               <span>AlgoriX</span>
             </div>
-            
+
             <div className="flex items-center space-x-6 text-sm text-red-100">
               <span className="flex items-center">
                 <Shield className="w-4 h-4 mr-1 text-white" />

@@ -9,6 +9,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,6 +18,9 @@ const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Get user and logout function from AuthContext
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -36,11 +40,10 @@ const Header: React.FC = () => {
   const isHome = location.pathname === '/';
 
   const profileMenuItems = [
-    { name: 'My Shop', icon: <Store className="w-4 h-4" />, action: () => navigate('/my-shop') },
-    { name: 'Performance', icon: <BarChart2 className="w-4 h-4" />, action: () => navigate('/performance') },
+    { name: 'My Profile', icon: <User className="w-4 h-4" />, action: () => navigate('/profile') },
+    { name: 'My Orders', icon: <ShoppingBag className="w-4 h-4" />, action: () => navigate('/orders') },
     { name: 'Settings', icon: <Settings className="w-4 h-4" />, action: () => navigate('/settings') },
-    { name: 'Feedback', icon: <MessageCircle className="w-4 h-4" />, action: () => navigate('/feedback') },
-    { name: 'Logout', icon: <LogOut className="w-4 h-4" />, action: () => console.log('Logging out...') }
+    { name: 'Logout', icon: <LogOut className="w-4 h-4" />, action: () => logout() }
   ];
 
   // Icon variants for animation
@@ -84,17 +87,17 @@ const Header: React.FC = () => {
               onClick={() => navigate('/')}
             >
               <div className="relative">
-                {/* <motion.div
+                <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                   className="w-8 h-8 bg-gradient-to-r from-primary to-purple-600 rounded-lg flex items-center justify-center"
                 >
                   <span className="text-white font-bold text-lg">P</span>
-                </motion.div> */}
+                </motion.div>
               </div>
               <span className="text-xl font-bold font-heading bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Phoenix
+                PhoeniX Mall
               </span>
             </motion.div>
 
@@ -151,33 +154,41 @@ const Header: React.FC = () => {
               {/* Auth Buttons (only on Home) */}
               {isHome && (
                 <div className="hidden md:flex items-center space-x-2">
-                  <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate('/login')}
-                      className="flex items-center space-x-1.5 rounded-full px-4"
-                    >
-                      <LogIn className="w-4 h-4" />
-                      <span>Login</span>
-                    </Button>
-                  </motion.div>
-                  <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
-                    <Button
-                      size="sm"
-                      onClick={() => navigate('/signup')}
-                      className="flex items-center space-x-1.5 rounded-full px-4 bg-gradient-to-r from-primary to-purple-600"
-                    >
-                      <UserPlus className="w-4 h-4" />
-                      <span>Sign Up</span>
-                    </Button>
-                  </motion.div>
+                  {user ? (
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-foreground">Welcome, {user.first_name}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => navigate('/login')}
+                          className="flex items-center space-x-1.5 rounded-full px-4"
+                        >
+                          <LogIn className="w-4 h-4" />
+                          <span>Login</span>
+                        </Button>
+                      </motion.div>
+                      <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
+                        <Button
+                          size="sm"
+                          onClick={() => navigate('/register')}
+                          className="flex items-center space-x-1.5 rounded-full px-4 bg-gradient-to-r from-primary to-purple-600"
+                        >
+                          <UserPlus className="w-4 h-4" />
+                          <span>Sign Up</span>
+                        </Button>
+                      </motion.div>
+                    </>
+                  )}
                 </div>
               )}
 
-              {/* Icons Row */}
+              {/* Icons Row - Show on ALL pages when user is logged in */}
               <div className="flex items-center space-x-3">
-                {!isHome && (
+                {user ? (
                   <>
                     {/* Messaging */}
                     <motion.div
@@ -239,103 +250,126 @@ const Header: React.FC = () => {
                       <Megaphone className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
                     </motion.div>
 
-                    {/* Sell */}
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
-                      <Button
-                        size="sm"
-                        onClick={() => navigate('/sell')}
-                        className="flex items-center space-x-1.5 rounded-full bg-gradient-to-r from-primary to-purple-600"
-                      >
-                        <PlusCircle className="w-4 h-4" />
-                        <span>Sell</span>
-                      </Button>
-                    </motion.div>
-                  </>
-                )}
-
-                {/* Cart (always) */}
-                <motion.div
-                  variants={iconVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                  className="relative p-2 rounded-full hover:bg-accent cursor-pointer group"
-                  onClick={() => navigate('/cart')}
-                >
-                  <ShoppingBag className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
-                  <motion.span
-                    variants={badgeVariants}
-                    initial="initial"
-                    animate="animate"
-                    className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
-                  >
-                    3
-                  </motion.span>
-                </motion.div>
-
-                {/* User Dropdown (always) */}
-                <div
-                  className="relative"
-                  onMouseEnter={() => setIsProfileMenuOpen(true)}
-                  onMouseLeave={() => setIsProfileMenuOpen(false)}
-                >
-                  <motion.div
-                    variants={iconVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    className="p-2 rounded-full hover:bg-accent cursor-pointer group"
-                  >
-                    <User className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
-                  </motion.div>
-
-                  <AnimatePresence>
-                    {isProfileMenuOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-xl p-2 z-50 overflow-hidden"
-                        style={{ originY: 0, originX: 1 }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-50" />
-
-                        <div className="relative space-y-1">
-                          <div className="px-3 py-2 border-b border-border/50">
-                            <p className="font-medium text-sm">John Doe</p>
-                            <p className="text-xs text-muted-foreground">john@example.com</p>
-                          </div>
-
-                          {profileMenuItems.map((item, index) => (
-                            <motion.div
-                              key={item.name}
-                              className="flex items-center gap-3 px-3 py-2.5 hover:bg-accent cursor-pointer rounded-md text-sm group"
-                              onClick={item.action}
-                              initial={{ opacity: 0, x: 10 }}
-                              animate={{
-                                opacity: 1,
-                                x: 0,
-                                transition: {
-                                  delay: index * 0.05,
-                                  type: "spring",
-                                  stiffness: 500
-                                }
-                              }}
-                              whileHover={{ x: 4 }}
-                            >
-                              <motion.div
-                                whileHover={{ scale: 1.2 }}
-                                className="text-foreground/80 group-hover:text-white transition-colors"
-                              >
-                                {item.icon}
-                              </motion.div>
-                              <span className="group-hover:text-white transition-colors">{item.name}</span>
-                            </motion.div>
-                          ))}
-                        </div>
+                    {/* Sell - Only for sellers */}
+                    {user.role === 'seller' && (
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
+                        <Button
+                          size="sm"
+                          onClick={() => navigate('/sell')}
+                          className="flex items-center space-x-1.5 rounded-full bg-gradient-to-r from-primary to-purple-600"
+                        >
+                          <PlusCircle className="w-4 h-4" />
+                          <span>Sell</span>
+                        </Button>
                       </motion.div>
                     )}
-                  </AnimatePresence>
-                </div>
+
+                    {/* Cart */}
+                    <motion.div
+                      variants={iconVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className="relative p-2 rounded-full hover:bg-accent cursor-pointer group"
+                      onClick={() => navigate('/cart')}
+                    >
+                      <ShoppingBag className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
+                      <motion.span
+                        variants={badgeVariants}
+                        initial="initial"
+                        animate="animate"
+                        className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
+                      >
+                        3
+                      </motion.span>
+                    </motion.div>
+
+                    {/* User Dropdown */}
+                    <div
+                      className="relative"
+                      onMouseEnter={() => setIsProfileMenuOpen(true)}
+                      onMouseLeave={() => setIsProfileMenuOpen(false)}
+                    >
+                      <motion.div
+                        variants={iconVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                        className="p-2 rounded-full hover:bg-accent cursor-pointer group"
+                      >
+                        <User className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
+                      </motion.div>
+
+                      <AnimatePresence>
+                        {isProfileMenuOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                            className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-xl p-2 z-50 overflow-hidden"
+                            style={{ originY: 0, originX: 1 }}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-50" />
+
+                            <div className="relative space-y-1">
+                              <div className="px-3 py-2 border-b border-border/50">
+                                <p className="font-medium text-sm">{user.first_name} {user.last_name}</p>
+                                <p className="text-xs text-muted-foreground">{user.email}</p>
+                              </div>
+
+                              {profileMenuItems.map((item, index) => (
+                                <motion.div
+                                  key={item.name}
+                                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-accent cursor-pointer rounded-md text-sm group"
+                                  onClick={item.action}
+                                  initial={{ opacity: 0, x: 10 }}
+                                  animate={{
+                                    opacity: 1,
+                                    x: 0,
+                                    transition: {
+                                      delay: index * 0.05,
+                                      type: "spring",
+                                      stiffness: 500
+                                    }
+                                  }}
+                                  whileHover={{ x: 4 }}
+                                >
+                                  <motion.div
+                                    whileHover={{ scale: 1.2 }}
+                                    className="text-foreground/80 group-hover:text-white transition-colors"
+                                  >
+                                    {item.icon}
+                                  </motion.div>
+                                  <span className="group-hover:text-white transition-colors">{item.name}</span>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </>
+                ) : (
+                  // Show only cart for non-logged in users on non-home pages
+                  !isHome && (
+                    <motion.div
+                      variants={iconVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className="relative p-2 rounded-full hover:bg-accent cursor-pointer group"
+                      onClick={() => navigate('/cart')}
+                    >
+                      <ShoppingBag className="w-5 h-5 text-foreground/80 group-hover:text-white transition-colors" />
+                      <motion.span
+                        variants={badgeVariants}
+                        initial="initial"
+                        animate="animate"
+                        className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
+                      >
+                        0
+                      </motion.span>
+                    </motion.div>
+                  )
+                )}
               </div>
 
               {/* Mobile Menu Toggle */}
@@ -412,7 +446,7 @@ const Header: React.FC = () => {
                         <div className="w-8 h-8 bg-gradient-to-r from-primary to-purple-600 rounded-lg flex items-center justify-center">
                           <span className="text-white font-bold text-lg">P</span>
                         </div>
-                        <span className="text-xl font-bold font-heading">Phoenix</span>
+                        <span className="text-xl font-bold font-heading">PhoeniX Mall</span>
                       </motion.div>
 
                       <motion.button
@@ -425,7 +459,7 @@ const Header: React.FC = () => {
                       </motion.button>
                     </div>
 
-                    {/* 🔥 Navigation Items stacked */}
+                    {/* Navigation Items */}
                     <div className="flex flex-col space-y-3">
                       {navigationItems.map((item) => (
                         <motion.button
@@ -448,15 +482,59 @@ const Header: React.FC = () => {
                       ))}
                     </div>
 
-                    {/* existing Action Icons for Mobile (Messages, Notifications, etc.) */}
-                    <div className="grid grid-cols-4 gap-2 py-4 border-t border-border/50">
-                      {/* ...your existing icon blocks here ... */}
-                    </div>
+                    {/* Auth buttons in mobile menu */}
+                    {!user && (
+                      <div className="flex flex-col space-y-3 pt-4 border-t border-border/50">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            navigate('/login');
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="w-full"
+                        >
+                          <LogIn className="w-4 h-4 mr-2" />
+                          Login
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            navigate('/register');
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="w-full bg-gradient-to-r from-primary to-purple-600"
+                        >
+                          <UserPlus className="w-4 h-4 mr-2" />
+                          Sign Up
+                        </Button>
+                      </div>
+                    )}
 
-                    {/* Sell button and auth buttons remain below */}
+                    {/* User info if logged in */}
+                    {user && (
+                      <div className="pt-4 border-t border-border/50">
+                        <div className="px-3 py-2">
+                          <p className="font-medium text-sm">{user.first_name} {user.last_name}</p>
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
+                        </div>
+                        <div className="flex flex-col space-y-2 mt-3">
+                          {profileMenuItems.map((item) => (
+                            <button
+                              key={item.name}
+                              onClick={() => {
+                                item.action();
+                                setIsMobileMenuOpen(false);
+                              }}
+                              className="flex items-center gap-3 px-3 py-2 text-left text-sm hover:bg-accent rounded-md"
+                            >
+                              {item.icon}
+                              <span>{item.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
-
               </>
             )}
           </AnimatePresence>
