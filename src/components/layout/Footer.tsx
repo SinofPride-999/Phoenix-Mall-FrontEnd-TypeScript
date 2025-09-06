@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative bg-gradient-to-b from-red-600 via-red-700 to-red-800 text-white overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-red-600 via-red-700 to-amber-600 text-white overflow-hidden">
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-72 h-72 bg-white rounded-full filter blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>

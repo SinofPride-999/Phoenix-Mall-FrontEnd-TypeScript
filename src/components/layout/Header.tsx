@@ -43,7 +43,8 @@ const Header: React.FC = () => {
     { name: 'My Profile', icon: <User className="w-4 h-4" />, action: () => navigate('/profile') },
     { name: 'My Orders', icon: <ShoppingBag className="w-4 h-4" />, action: () => navigate('/orders') },
     { name: 'Settings', icon: <Settings className="w-4 h-4" />, action: () => navigate('/settings') },
-    { name: 'Logout', icon: <LogOut className="w-4 h-4" />, action: () => logout() }
+    { name: 'Logout', icon: <LogOut className="w-4 h-4" />, action: () => logout() },
+    { name: 'My Profile', icon: <User className="w-4 h-4" />, action: () => navigate('/profile') }
   ];
 
   // Icon variants for animation
@@ -87,14 +88,14 @@ const Header: React.FC = () => {
               onClick={() => navigate('/')}
             >
               <div className="relative">
-                <motion.div
+                {/* <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                   className="w-8 h-8 bg-gradient-to-r from-primary to-purple-600 rounded-lg flex items-center justify-center"
                 >
                   <span className="text-white font-bold text-lg">P</span>
-                </motion.div>
+                </motion.div> */}
               </div>
               <span className="text-xl font-bold font-heading bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
                 PhoeniX Mall

@@ -119,3 +119,158 @@ export const handleApiError = (error: any, toast: any) => {
     variant: "destructive",
   });
 };
+
+// Profile API functions
+export const profileApi = {
+  // Get complete user profile
+  async getProfile() {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>('/api/profile');
+  },
+
+  // Update profile information
+  async updateProfile(profileData: {
+    first_name?: string;
+    last_name?: string;
+    phone?: string;
+    date_of_birth?: string;
+    gender?: string;
+    bio?: string;
+  }) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>('/api/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
+  },
+
+  // Update avatar
+  async updateAvatar(avatarUrl: string) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>('/api/profile/avatar', {
+      method: 'PATCH',
+      body: JSON.stringify({ avatar_url: avatarUrl }),
+    });
+  },
+
+  // Get all addresses
+  async getAddresses() {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any[];
+    }>('/api/profile/addresses');
+  },
+
+  // Get specific address
+  async getAddress(id: number) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>(`/api/profile/addresses/${id}`);
+  },
+
+  // Create new address
+  async createAddress(addressData: {
+    label: string;
+    recipient_name: string;
+    phone: string;
+    address_line1: string;
+    address_line2?: string;
+    city: string;
+    state: string;
+    country: string;
+    postal_code?: string;
+    is_default?: boolean;
+  }) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>('/api/profile/addresses', {
+      method: 'POST',
+      body: JSON.stringify(addressData),
+    });
+  },
+
+  // Update address
+  async updateAddress(id: number, addressData: {
+    label?: string;
+    recipient_name?: string;
+    phone?: string;
+    address_line1?: string;
+    address_line2?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    postal_code?: string;
+    is_default?: boolean;
+  }) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>(`/api/profile/addresses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(addressData),
+    });
+  },
+
+  // Delete address
+  async deleteAddress(id: number) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+    }>(`/api/profile/addresses/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Set default address
+  async setDefaultAddress(id: number) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+    }>(`/api/profile/addresses/${id}/default`, {
+      method: 'PATCH',
+    });
+  },
+
+  // Get user settings
+  async getSettings() {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>('/api/profile/settings');
+  },
+
+  // Update user settings
+  async updateSettings(settingsData: {
+    email_notifications?: boolean;
+    sms_notifications?: boolean;
+    newsletter_subscription?: boolean;
+    two_factor_auth?: boolean;
+    language?: string;
+    currency?: string;
+  }) {
+    return apiRequest<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>('/api/profile/settings', {
+      method: 'PUT',
+      body: JSON.stringify(settingsData),
+    });
+  },
+};
