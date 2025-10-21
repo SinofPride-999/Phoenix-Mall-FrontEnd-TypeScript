@@ -15,7 +15,6 @@ const Login: React.FC = () => {
     rememberMe: false
   });
   const [showPassword, setShowPassword] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
@@ -30,19 +29,14 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setIsLoading(true);
 
     try {
       await login(formData.email, formData.password);
       navigate('/shop');
     } catch (error) {
-      toast({
-        title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      // setIsLoading(false);
+      // Error is already handled in AuthContext, we don't need to show another toast here
+      // The AuthContext will show the specific error message from the API
+      console.log('Login error caught in component:', error);
     }
   };
 

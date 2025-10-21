@@ -63,7 +63,7 @@ const Profile: React.FC = () => {
 
   // Initialize edit data when profile loads
   React.useEffect(() => {
-    if (profile) {
+    if (profile?.user) {
       setEditData({
         first_name: profile.user.first_name || '',
         last_name: profile.user.last_name || '',
@@ -75,12 +75,12 @@ const Profile: React.FC = () => {
 
       if (profile.settings) {
         setSettingsData({
-          email_notifications: profile.settings.email_notifications,
-          sms_notifications: profile.settings.sms_notifications,
-          newsletter_subscription: profile.settings.newsletter_subscription,
-          two_factor_auth: profile.settings.two_factor_auth,
-          language: profile.settings.language,
-          currency: profile.settings.currency
+          email_notifications: profile.settings.email_notifications ?? true,
+          sms_notifications: profile.settings.sms_notifications ?? false,
+          newsletter_subscription: profile.settings.newsletter_subscription ?? true,
+          two_factor_auth: profile.settings.two_factor_auth ?? false,
+          language: profile.settings.language || 'en',
+          currency: profile.settings.currency || 'GHS'
         });
       }
     }
@@ -147,7 +147,7 @@ const Profile: React.FC = () => {
     );
   }
 
-  if (!profile) {
+  if (!profile || !profile.user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -157,6 +157,8 @@ const Profile: React.FC = () => {
       </div>
     );
   }
+
+  const { user } = profile;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -184,9 +186,9 @@ const Profile: React.FC = () => {
               <div className="text-center mb-6">
                 <div className="relative inline-block mb-4">
                   <div className="w-24 h-24 rounded-full bg-gradient-primary flex items-center justify-center text-white text-2xl font-bold mx-auto">
-                    {profile.user.avatar_url ? (
+                    {user.avatar_url ? (
                       <img
-                        src={profile.user.avatar_url}
+                        src={user.avatar_url}
                         alt="Profile"
                         className="w-full h-full rounded-full object-cover"
                       />
@@ -206,34 +208,34 @@ const Profile: React.FC = () => {
                   </label>
                 </div>
                 <h2 className="text-xl font-semibold">
-                  {profile.user.first_name} {profile.user.last_name}
+                  {user.first_name} {user.last_name}
                 </h2>
-                <p className="text-muted-foreground">{profile.user.email}</p>
-                <p className="text-sm text-primary mt-1 capitalize">{profile.user.role}</p>
+                <p className="text-muted-foreground">{user.email}</p>
+                <p className="text-sm text-primary mt-1 capitalize">{user.role}</p>
               </div>
 
               {/* Basic Info */}
               <div className="space-y-3">
                 <div className="flex items-center text-sm">
                   <Mail className="w-4 h-4 mr-2 text-muted-foreground" />
-                  <span>{profile.user.email}</span>
+                  <span>{user.email}</span>
                 </div>
-                {profile.user.phone && (
+                {user.phone && (
                   <div className="flex items-center text-sm">
                     <Phone className="w-4 h-4 mr-2 text-muted-foreground" />
-                    <span>{profile.user.phone}</span>
+                    <span>{user.phone}</span>
                   </div>
                 )}
-                {profile.user.date_of_birth && (
+                {user.date_of_birth && (
                   <div className="flex items-center text-sm">
                     <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
-                    <span>{new Date(profile.user.date_of_birth).toLocaleDateString()}</span>
+                    <span>{new Date(user.date_of_birth).toLocaleDateString()}</span>
                   </div>
                 )}
-                {profile.user.gender && (
+                {user.gender && (
                   <div className="flex items-center text-sm">
                     <User className="w-4 h-4 mr-2 text-muted-foreground" />
-                    <span className="capitalize">{profile.user.gender}</span>
+                    <span className="capitalize">{user.gender}</span>
                   </div>
                 )}
               </div>
@@ -431,7 +433,7 @@ const Profile: React.FC = () => {
                 </div>
               )}
 
-              {profile.addresses.length === 0 ? (
+              {(!profile.addresses || profile.addresses.length === 0) ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <MapPin className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <p>No addresses added yet</p>

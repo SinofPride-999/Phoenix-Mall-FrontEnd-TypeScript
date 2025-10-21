@@ -20,16 +20,12 @@ interface Address {
 }
 
 interface UserSettings {
-  id: number;
-  user_id: number;
   email_notifications: boolean;
   sms_notifications: boolean;
   newsletter_subscription: boolean;
   two_factor_auth: boolean;
   language: string;
   currency: string;
-  created_at: string;
-  updated_at: string;
 }
 
 interface UserProfile {
@@ -44,7 +40,6 @@ interface UserProfile {
   gender: string | null;
   bio: string | null;
   is_verified: boolean;
-  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -93,11 +88,15 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     try {
       setIsLoading(true);
+      console.log('🔄 Refreshing profile...');
       const response = await profileApi.getProfile();
+      console.log('✅ Profile response:', response);
+
       if (response.success) {
         setProfile(response.data);
       }
     } catch (error: any) {
+      console.error('❌ Profile refresh error:', error);
       toast({
         title: "Failed to load profile",
         description: error.message || "Something went wrong",
@@ -114,9 +113,13 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const updateProfile = async (data: Partial<UserProfile>) => {
     try {
+      console.log('🔄 Updating profile with data:', data);
       const response = await profileApi.updateProfile(data);
       if (response.success) {
-        setProfile(prev => prev ? { ...prev, user: { ...prev.user, ...data } } : null);
+        setProfile(prev => prev ? {
+          ...prev,
+          user: { ...prev.user, ...data }
+        } : null);
         toast({
           title: "Profile Updated",
           description: "Your profile has been updated successfully",
@@ -155,91 +158,92 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  const addAddress = async (addressData: Omit<Address, 'id' | 'created_at' | 'updated_at'>) => {
-    try {
-      const response = await profileApi.createAddress(addressData);
-      if (response.success) {
-        await refreshProfile(); // Refresh to get the new address with ID
-        toast({
-          title: "Address Added",
-          description: "Your address has been added successfully",
-        });
-      }
-    } catch (error: any) {
+const addAddress = async (addressData: Omit<Address, 'id' | 'created_at' | 'updated_at'>) => {
+  try {
+    const response = await profileApi.createAddress(addressData);
+    if (response.success) {
+      await refreshProfile(); // Refresh to get the new address with ID
       toast({
-        title: "Add Failed",
-        description: error.message || "Something went wrong",
-        variant: "destructive",
+        title: "Address Added",
+        description: "Your address has been added successfully",
       });
-      throw error;
     }
-  };
+  } catch (error: any) {
+    toast({
+      title: "Add Failed",
+      description: error.message || "Something went wrong",
+      variant: "destructive",
+    });
+    throw error;
+  }
+};
 
-  const updateAddress = async (id: number, addressData: Partial<Address>) => {
-    try {
-      const response = await profileApi.updateAddress(id, addressData);
-      if (response.success) {
-        await refreshProfile(); // Refresh to get updated addresses
-        toast({
-          title: "Address Updated",
-          description: "Your address has been updated successfully",
-        });
-      }
-    } catch (error: any) {
+const updateAddress = async (id: number, addressData: Partial<Address>) => {
+  try {
+    const response = await profileApi.updateAddress(id, addressData);
+    if (response.success) {
+      await refreshProfile(); // Refresh to get updated addresses
       toast({
-        title: "Update Failed",
-        description: error.message || "Something went wrong",
-        variant: "destructive",
+        title: "Address Updated",
+        description: "Your address has been updated successfully",
       });
-      throw error;
     }
-  };
+  } catch (error: any) {
+    toast({
+      title: "Update Failed",
+      description: error.message || "Something went wrong",
+      variant: "destructive",
+    });
+    throw error;
+  }
+};
 
-  const deleteAddress = async (id: number) => {
-    try {
-      const response = await profileApi.deleteAddress(id);
-      if (response.success) {
-        setProfile(prev => prev ? {
-          ...prev,
-          addresses: prev.addresses.filter(addr => addr.id !== id)
-        } : null);
-        toast({
-          title: "Address Deleted",
-          description: "Your address has been deleted successfully",
-        });
-      }
-    } catch (error: any) {
+const deleteAddress = async (id: number) => {
+  try {
+    const response = await profileApi.deleteAddress(id);
+    if (response.success) {
+      setProfile(prev => prev ? {
+        ...prev,
+        addresses: prev.addresses.filter(addr => addr.id !== id)
+      } : null);
       toast({
-        title: "Delete Failed",
-        description: error.message || "Something went wrong",
-        variant: "destructive",
+        title: "Address Deleted",
+        description: "Your address has been deleted successfully",
       });
-      throw error;
     }
-  };
+  } catch (error: any) {
+    toast({
+      title: "Delete Failed",
+      description: error.message || "Something went wrong",
+      variant: "destructive",
+    });
+    throw error;
+  }
+};
 
-  const setDefaultAddress = async (id: number) => {
-    try {
-      const response = await profileApi.setDefaultAddress(id);
-      if (response.success) {
-        await refreshProfile(); // Refresh to get updated default status
-        toast({
-          title: "Default Address Set",
-          description: "Your default address has been updated successfully",
-        });
-      }
-    } catch (error: any) {
+const setDefaultAddress = async (id: number) => {
+  try {
+    const response = await profileApi.setDefaultAddress(id);
+    if (response.success) {
+      await refreshProfile(); // Refresh to get updated default status
       toast({
-        title: "Update Failed",
-        description: error.message || "Something went wrong",
-        variant: "destructive",
+        title: "Default Address Set",
+        description: "Your default address has been updated successfully",
       });
-      throw error;
     }
-  };
+  } catch (error: any) {
+    toast({
+      title: "Update Failed",
+      description: error.message || "Something went wrong",
+      variant: "destructive",
+    });
+    throw error;
+  }
+};
 
   const updateSettings = async (settingsData: Partial<UserSettings>) => {
     try {
+      console.log('🔄 Updating settings with data:', settingsData);
       const response = await profileApi.updateSettings(settingsData);
       if (response.success) {
         setProfile(prev => prev ? {

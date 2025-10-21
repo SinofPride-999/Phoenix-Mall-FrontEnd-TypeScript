@@ -1,4 +1,3 @@
-// pages/Register.tsx
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,7 +20,6 @@ const Register: React.FC = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { register, isLoading } = useAuth();
   const navigate = useNavigate();
@@ -53,11 +51,8 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // if (!validateForm()) return;
-
-    // setIsLoading(true);
-
     try {
+      // Validate form before sending to API
       validateForm();
 
       await register({
@@ -65,28 +60,27 @@ const Register: React.FC = () => {
         password: formData.password,
         first_name: formData.firstName,
         last_name: formData.lastName,
-        role: 'buyer' // Default role, you can make this dynamic
+        role: 'buyer'
       });
 
       navigate('/');
-    } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      // setIsLoading(false);
+    } catch (error: any) {
+      // Check if it's a validation error from our form
+      if (error.message.includes("Passwords don't match") ||
+          error.message.includes("Password must be at least") ||
+          error.message.includes("Please agree to the terms")) {
+        // Show the client-side validation error
+        toast({
+          title: "Registration Failed",
+          description: error.message,
+          variant: "destructive"
+        });
+      }
+      // For API errors, they are already handled in AuthContext
+      // So we don't need to show another toast here
+      console.log('Registration error caught in component:', error);
     }
   };
-
-  const passwordRequirements = [
-    { id: 1, text: 'At least 8 characters', met: formData.password.length >= 8 },
-    { id: 2, text: 'Contains uppercase letter', met: /[A-Z]/.test(formData.password) },
-    { id: 3, text: 'Contains lowercase letter', met: /[a-z]/.test(formData.password) },
-    { id: 4, text: 'Contains number', met: /[0-9]/.test(formData.password) },
-    { id: 5, text: 'Contains special character', met: /[^A-Za-z0-9]/.test(formData.password) }
-  ];
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
@@ -130,6 +124,7 @@ const Register: React.FC = () => {
                     className="pl-10 pr-4 py-3"
                   />
                 </div>
+              </div>
 
               {/* Last Name */}
               <div className="space-y-2">
@@ -274,7 +269,6 @@ const Register: React.FC = () => {
                   </Link>
                 </label>
               </div>
-            </div>
 
               <div className="flex items-start space-x-2">
                 <Checkbox

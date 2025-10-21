@@ -1,7 +1,5 @@
 // src/lib/api.ts
-import { useToast } from '@/hooks/use-toast';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 
 // Helper function to handle API requests
 async function apiRequest<T>(
@@ -9,22 +7,58 @@ async function apiRequest<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  const response = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    credentials: 'include', // Important for sessions/cookies
-    ...options,
-  });
 
-  const data = await response.json();
+  // Get the token from localStorage
+  const token = localStorage.getItem('access_token');
 
-  if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong');
+  console.log('🔧 Making API request to:', url);
+  console.log('🔑 Token present:', !!token);
+  console.log('📦 Request method:', options.method || 'GET');
+
+  // Set up headers
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    ...options.headers,
+  };
+
+  // Add Authorization header if token exists
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
-  return data;
+  const config: RequestInit = {
+    headers,
+    ...options,
+  };
+
+  try {
+    const response = await fetch(url, config);
+    console.log('🔧 Response status:', response.status);
+
+    // Handle non-JSON responses
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      throw new Error(`Server returned non-JSON response: ${text}`);
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      // For 422 errors, include validation errors in the message
+      if (response.status === 422 && data.errors) {
+        const validationErrors = Object.values(data.errors).flat().join(', ');
+        throw new Error(`Validation failed: ${validationErrors}`);
+      }
+      throw new Error(data.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error('❌ API request failed:', error);
+    throw error;
+  }
 }
 
 // Auth API functions
@@ -37,36 +71,63 @@ export const authApi = {
     last_name: string;
     role: string;
   }) {
-    return apiRequest<{
+    const response = await apiRequest<{
       success: boolean;
       message: string;
-      data: any;
+      data: {
+        user: any;
+        access_token: string;
+        token_type: string;
+      };
     }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData),
     });
+
+    // Store the token after successful registration
+    if (response.success && response.data.access_token) {
+      localStorage.setItem('access_token', response.data.access_token);
+    }
+
+    return response;
   },
 
   // Login user
   async login(credentials: { email: string; password: string }) {
-    return apiRequest<{
+    const response = await apiRequest<{
       success: boolean;
       message: string;
-      data: any;
+      data: {
+        user: any;
+        access_token: string;
+        token_type: string;
+      };
     }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
+
+    // Store the token after successful login
+    if (response.success && response.data.access_token) {
+      localStorage.setItem('access_token', response.data.access_token);
+    }
+
+    return response;
   },
 
   // Logout user
   async logout() {
-    return apiRequest<{
+    const response = await apiRequest<{
       success: boolean;
       message: string;
     }>('/auth/logout', {
       method: 'POST',
     });
+
+    // Remove the token after logout (even if API call fails)
+    localStorage.removeItem('access_token');
+
+    return response;
   },
 
   // Get current user
@@ -87,7 +148,7 @@ export const productsApi = {
     return apiRequest<{
       success: boolean;
       data: any[];
-    }>(`/api/products?${queryParams}`);
+    }>(`/products?${queryParams}`);
   },
 
   // Get single product
@@ -95,7 +156,7 @@ export const productsApi = {
     return apiRequest<{
       success: boolean;
       data: any;
-    }>(`/api/products/${id}`);
+    }>(`/products/${id}`);
   },
 
   // Create product (for sellers)
@@ -103,7 +164,7 @@ export const productsApi = {
     return apiRequest<{
       success: boolean;
       data: any;
-    }>('/api/products', {
+    }>('/products', {
       method: 'POST',
       body: JSON.stringify(productData),
     });
@@ -113,9 +174,18 @@ export const productsApi = {
 // Utility function to handle API errors with toast notifications
 export const handleApiError = (error: any, toast: any) => {
   console.error('API Error:', error);
+
+  // Extract a user-friendly error message
+  let errorMessage = error.message || "Something went wrong";
+
+  // If it's a validation error, make it more readable
+  if (errorMessage.includes('Validation failed:')) {
+    errorMessage = errorMessage.replace('Validation failed:', 'Please check your input:');
+  }
+
   toast({
     title: "Error",
-    description: error.message || "Something went wrong",
+    description: errorMessage,
     variant: "destructive",
   });
 };
@@ -128,7 +198,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>('/api/profile');
+    }>('/profile');
   },
 
   // Update profile information
@@ -144,7 +214,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>('/api/profile', {
+    }>('/profile', {
       method: 'PUT',
       body: JSON.stringify(profileData),
     });
@@ -156,7 +226,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>('/api/profile/avatar', {
+    }>('/profile/avatar', {
       method: 'PATCH',
       body: JSON.stringify({ avatar_url: avatarUrl }),
     });
@@ -168,7 +238,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any[];
-    }>('/api/profile/addresses');
+    }>('/profile/addresses');
   },
 
   // Get specific address
@@ -177,7 +247,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>(`/api/profile/addresses/${id}`);
+    }>(`/profile/addresses/${id}`);
   },
 
   // Create new address
@@ -197,7 +267,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>('/api/profile/addresses', {
+    }>('/profile/addresses', {
       method: 'POST',
       body: JSON.stringify(addressData),
     });
@@ -220,7 +290,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>(`/api/profile/addresses/${id}`, {
+    }>(`/profile/addresses/${id}`, {
       method: 'PUT',
       body: JSON.stringify(addressData),
     });
@@ -231,7 +301,7 @@ export const profileApi = {
     return apiRequest<{
       success: boolean;
       message: string;
-    }>(`/api/profile/addresses/${id}`, {
+    }>(`/profile/addresses/${id}`, {
       method: 'DELETE',
     });
   },
@@ -241,7 +311,7 @@ export const profileApi = {
     return apiRequest<{
       success: boolean;
       message: string;
-    }>(`/api/profile/addresses/${id}/default`, {
+    }>(`/profile/addresses/${id}/default`, {
       method: 'PATCH',
     });
   },
@@ -252,7 +322,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>('/api/profile/settings');
+    }>('/profile/settings');
   },
 
   // Update user settings
@@ -268,7 +338,7 @@ export const profileApi = {
       success: boolean;
       message: string;
       data: any;
-    }>('/api/profile/settings', {
+    }>('/profile/settings', {
       method: 'PUT',
       body: JSON.stringify(settingsData),
     });

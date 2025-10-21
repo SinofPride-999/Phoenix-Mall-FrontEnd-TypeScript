@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authApi } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
@@ -42,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+
   useEffect(() => {
     checkAuthStatus();
   }, []);
@@ -53,9 +53,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (response.success) {
         setUser(response.data);
       }
-    } catch (error) {
+    } catch (error: any) {
       // Not authenticated, clear user
       setUser(null);
+      console.log('Auth check failed (expected if not logged in):', error.message);
     } finally {
       setIsLoading(false);
     }
@@ -66,16 +67,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(true);
       const response = await authApi.login({ email, password });
       if (response.success) {
-        setUser(response.data);
+        setUser(response.data.user);
         toast({
           title: "Login Successful",
           description: "Welcome back to Phoenix!",
         });
       }
     } catch (error: any) {
+      // Show the actual error message from the API
+      const errorMessage = error.message || "Invalid email or password";
       toast({
         title: "Login Failed",
-        description: error.message || "Invalid email or password",
+        description: errorMessage,
         variant: "destructive",
       });
       throw error;
@@ -95,16 +98,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(true);
       const response = await authApi.register(userData);
       if (response.success) {
-        setUser(response.data);
+        setUser(response.data.user);
         toast({
           title: "Account Created",
           description: "Welcome to Phoenix! Your account has been created successfully.",
         });
       }
     } catch (error: any) {
+      // Show the actual error message from the API
+      const errorMessage = error.message || "Something went wrong during registration";
       toast({
         title: "Registration Failed",
-        description: error.message || "Something went wrong",
+        description: errorMessage,
         variant: "destructive",
       });
       throw error;
@@ -122,10 +127,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: "You have been successfully logged out",
       });
     } catch (error: any) {
+      // Even if the API call fails, clear local state and show success
+      setUser(null);
+      localStorage.removeItem('access_token');
       toast({
-        title: "Logout Failed",
-        description: error.message || "Something went wrong",
-        variant: "destructive",
+        title: "Logged Out",
+        description: "You have been successfully logged out",
       });
     }
   };
