@@ -1,10 +1,10 @@
 // src/pages/HomePage.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { 
-  TrendingUp, 
-  Shield, 
-  Truck, 
+import {
+  TrendingUp,
+  Shield,
+  Truck,
   HeadphonesIcon,
   Star,
   Clock,
@@ -144,7 +144,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       {/* Mobile Search Bar */}
       {isMobile && (
         <AnimatePresence>
@@ -171,7 +171,7 @@ const HomePage: React.FC = () => {
           )}
         </AnimatePresence>
       )}
-      
+
       <main className="relative">
         {/* Hero Section */}
         <HeroSection />
@@ -404,7 +404,7 @@ const HomePage: React.FC = () => {
                   Stay <span className="text-gradient">Updated</span>
                 </h2>
                 <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">
-                  Subscribe to our newsletter and be the first to know about new products, 
+                  Subscribe to our newsletter and be the first to know about new products,
                   exclusive deals, and special promotions
                 </p>
 
@@ -421,7 +421,7 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <p className="text-xs text-muted-foreground mt-4">
-                  By subscribing, you agree to our Privacy Policy and consent to receive 
+                  By subscribing, you agree to our Privacy Policy and consent to receive
                   updates from our company.
                 </p>
               </motion.div>
@@ -429,10 +429,10 @@ const HomePage: React.FC = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
       <MobileBottomNav />
-      
+
       {/* Floating Action Button for Mobile Search */}
       {isMobile && !showSearchBar && (
         <motion.button
